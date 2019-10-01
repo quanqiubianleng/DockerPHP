@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+  php:
+    build:
+      context: ./
+      dockerfile: ./config/php/Dockerfile
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+        DEFAULT_TIMEZONE: "$PHP_VERSION"
+        PHP_EXTENSIONS: ${PHP_VERSION}
+        PHPREDIS_VERSION: ${PHP_VERSION}
+        SWOOLE_VERSION: ${PHP_VERSION}
+        APP_ENV: ${PHP_VERSION}
+    image: soinx/php:${PHP_VERSION}
+    ports:
+      - "${PHP_HOST_PORT}:8000"
+      - "${PHP_HOST_PORT1}:9501"
+      - "${PHP_HOST_PORT2}:9502"
+      - "${PHP_HOST_PORT3}:9503"
+    volumes:
+      - ${CODE_DIR}:/Sol/code/:rw
+      - ${PHP_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
+      - ${PHP_LOG_DIR}:/var/log/php
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      - sol
+
+networks:
+  sol:
+    name: sol

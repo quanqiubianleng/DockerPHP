@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  SolCloud:
+    image: soinx/php
+    container_name: SolCloud
+    environment:
+      - TIMEZONE=${DEFAULT_TIMEZONE}
+      - APP_ENV=${APP_ENV}
+    ports:
+      - "${PHP_HOST_PORT}:8000"
+      - "${PHP_HOST_PORT1}:9501"
+      - "${PHP_HOST_PORT2}:9502"
+      - "${PHP_HOST_PORT3}:9503"
+    volumes:
+      - ${CODE_DIR}:/Sol/code/
+      - ${PHP_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
+      - ${PHP_LOG_DIR}:/var/log/php
+    restart: always
+    command:
+      - /bin/sh
+      - -c
+      - |
+        git pull
+        composer install
+        php /Sol/code/think run
+    networks:
+      - sol
+networks:
+  sol:
+    name: sol
