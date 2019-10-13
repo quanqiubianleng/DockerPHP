@@ -21,7 +21,7 @@ services:
       - -c
       - |
         git pull
-        composer install
+        composer install  --no-dev
         php /Sol/code/think run
     networks:
       - sol
